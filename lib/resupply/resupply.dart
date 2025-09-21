@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:vendingmachine_app/designGUI.dart';
+
+import 'Item.dart';
+
+class Resupply extends StatefulWidget {
+  const Resupply({super.key});
+
+  @override
+  State<Resupply> createState() => _ResupplyState();
+}
+
+class _ResupplyState extends State<Resupply> {
+  Widget build(BuildContext) {
+    return PopScope(
+      onPopInvoked: (didPop) {
+        isrefresh.value = true;
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text("การเติมสินค้า")),
+        body: ListView(
+          children:
+              itemsInVendingMachine.values
+                  .map((item) => ListItem(item))
+                  .toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget ListItem(Item item) {
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(child: Text(item.stockLeft.toString())),
+        title: Text(item.name),
+        subtitle: Text("ราคา ${item.price.toString()} บาท"),
+        trailing: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              item.addsupply();
+            });
+          },
+          child: Text("เติมสินค้า"),
+        ),
+      ),
+    );
+  }
+}
+
+class ShowResupplyBT extends StatelessWidget {
+  const ShowResupplyBT({super.key});
+
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        showDialog(context: context, builder: (context) => Resupply());
+      },
+      child: Icon(Icons.key),
+    );
+  }
+}

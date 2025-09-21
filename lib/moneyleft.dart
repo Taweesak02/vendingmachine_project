@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vendingmachine_app/payment/payment.dart';
+import 'package:vendingmachine_app/showresult.dart';
+import 'designGUI.dart';
 
 class MoneyLeft extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ShowMoneyLeftDialogue extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("ตอนนี้มีเงินคงเหลือในตู้"),
+            Text("ตอนนี้มีเงินคงเหลืออยู่ในตู้"),
             Text('${sum.toString()} บาท'),
           ],
         ),
@@ -48,10 +49,25 @@ class ShowMoneyLeftDialogue extends StatelessWidget {
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.red),
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+            if (sum > 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ShowWithdrawn()),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(title: Text("เงินคงเหลือไม่มีอยู่แล้ว"));
+                },
+              );
+            }
+          },
           child: Text("คืนเงิน", style: TextStyle(color: Colors.white)),
         ),
-        ElevatedButton(
+         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text("ย้อนกลับซื้อของ"),
         ),

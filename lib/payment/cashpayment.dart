@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/payment/money.dart';
 import 'package:vendingmachine_app/showresult.dart';
-import '../Item.dart';
-import 'payment.dart';
+import '../designGUI.dart';
+import '../resupply/Item.dart';
 
 class CashPayment extends StatefulWidget {
   const CashPayment({super.key, required this.item});
@@ -28,14 +28,17 @@ class _CashPaymentState extends State<CashPayment> {
   void checkSum() {
     if (targetmoney <= 0) {
       if (targetmoney < 0) {
+        //จ่ายเกิน
         sum += targetmoney * -1;
+      }else{
+        sum = 0;
       }
-
+      
       paymentCompleted = true;
       Navigator.of(context).pop();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Showresult()),
+        MaterialPageRoute(builder: (context) => Showresult(item: widget.item)),
       );
       print(sum);
     }

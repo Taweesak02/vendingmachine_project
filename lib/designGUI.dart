@@ -3,18 +3,30 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/moneyleft.dart';
 import 'package:vendingmachine_app/payment/payment.dart';
-import 'Item.dart';
+import 'package:vendingmachine_app/resupply/resupply.dart';
+import 'resupply/Item.dart';
+import 'showresult.dart';
 
-class VendingMachineGUI extends StatelessWidget {
+final ValueNotifier<bool> isrefresh = ValueNotifier(false);
+double sum = 0;
+
+class VendingMachineGUI extends StatefulWidget {
   const VendingMachineGUI({super.key});
 
+  @override
+  State<VendingMachineGUI> createState() => _VendingMachineGUIState();
+}
+
+class _VendingMachineGUIState extends State<VendingMachineGUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Vending Machine"),
         actionsPadding: EdgeInsets.all(10),
         actions: [
-          ShowMoneyLeftDialogue()
+          ShowResupplyBT(),
+          SizedBox(width: 10),
+          ShowMoneyLeftDialogue(),
         ],
       ),
       body: Container(
@@ -35,11 +47,16 @@ class VendingMachineGUI extends StatelessWidget {
   }
 }
 
-class ItemDisplay extends StatelessWidget {
+class ItemDisplay extends StatefulWidget {
   const ItemDisplay({super.key, required this.item});
 
   final Item item;
 
+  @override
+  State<ItemDisplay> createState() => _ItemDisplayState();
+}
+
+class _ItemDisplayState extends State<ItemDisplay> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
@@ -49,57 +66,63 @@ class ItemDisplay extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => ConfirmPurchase(item: item),
+            builder: (context) => ConfirmPurchase(item: widget.item),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Ink.image(
-                        image: AssetImage(item.image),
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color:
-                              item.stockLeft > 0
-                                  ? Colors.green[400]
-                                  : Colors.red[400],
-                          borderRadius: BorderRadius.circular(20),
+        child: ValueListenableBuilder(
+          valueListenable: isrefresh,
+          builder: (context, value, child) {
+            isrefresh.value = false;
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Ink.image(
+                            image: AssetImage(widget.item.image),
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
-                        child: Text(
-                          item.stockLeft > 0
-                              ? item.stockLeft.toString()
-                              : "หมด",
-                          textAlign: TextAlign.center,
-                          textScaler: TextScaler.linear(1.3),
-                          style: TextStyle(color: Colors.white),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color:
+                                  widget.item.stockLeft > 0
+                                      ? Colors.green[400]
+                                      : Colors.red[400],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              widget.item.stockLeft > 0
+                                  ? widget.item.stockLeft.toString()
+                                  : "หมด",
+                              textAlign: TextAlign.center,
+                              textScaler: TextScaler.linear(1.3),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(widget.item.name),
+                        Text("${widget.item.price.toString()} ฿"),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(item.name),
-                    Text("${item.price.toString()} ฿"),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -152,11 +175,27 @@ class ConfirmPurchase extends StatelessWidget {
           ),
           child: const Text('ยืนยัน', style: TextStyle(color: Colors.white)),
           onPressed: () {
+            // Navigator.of(context).pop();
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => Payment(item: item)),
+            // );
             Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Payment(item: item)),
-            );
+              if (sum - item.price < 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Payment(item: item),
+                  ),
+                );
+              } else {
+                sum -= item.price;
+                print(sum);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Showresult(item:item,)),
+                );
+              }
           },
         ),
         TextButton(

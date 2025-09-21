@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/moneyleft.dart';
-import 'package:vendingmachine_app/showresult.dart';
-import '../Item.dart';
+import '../resupply/Item.dart';
 import 'cashpayment.dart';
 import 'digitalpayment.dart';
 
-double sum = 0;
+
 
 class Payment extends StatefulWidget {
   const Payment({super.key, required this.item});
@@ -28,22 +27,23 @@ class _PaymentState extends State<Payment> {
             borderRadius: BorderRadius.circular(8),
             onTap: () {
               Navigator.of(context).pop();
-              if (sum - widget.item.price < 0) {
-                print(sum);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CashPayment(item: widget.item),
-                  ),
-                );
-              } else {
-                sum -= widget.item.price;
-                print(sum);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Showresult()),
-                );
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CashPayment(item: widget.item),
+                ),
+              );
+              // if (sum - widget.item.price < 0) {
+              //   print(sum);
+                
+              // } else {
+              //   sum -= widget.item.price;
+              //   print(sum);
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (context) => Showresult(item: widget.item,)),
+              //   );
+              // }
             },
             child: Column(
               spacing: 20,
@@ -63,7 +63,7 @@ class _PaymentState extends State<Payment> {
               Navigator.of(context).pop();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DigitalPayment()),
+                MaterialPageRoute(builder: (context) => DigitalPayment(item: widget.item,)),
               );
             },
             child: Column(
