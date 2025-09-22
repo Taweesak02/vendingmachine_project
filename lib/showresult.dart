@@ -99,6 +99,11 @@ class ShowWithdrawn extends StatelessWidget {
   Widget build(BuildContext context) {
     double withdrawnprice = sum;
     sum = 0;
+
+    int baht10 = (withdrawnprice ~/ 10);
+    int baht5 = ((withdrawnprice % 10) ~/ 5);
+    int baht2 = ((withdrawnprice % 5) ~/ 2);
+    int baht1 = (withdrawnprice % 2).toInt();
     return Scaffold(
       appBar: AppBar(title: Text("การคืนเงิน")),
       body: Padding(
@@ -116,7 +121,58 @@ class ShowWithdrawn extends StatelessWidget {
               ),
               Text("คืนเงินทั้งหมด $withdrawnprice บาท"),
               Padding(
-                padding: const EdgeInsets.only(top: 300),
+                padding: const EdgeInsets.only(top: 100),
+                child: Row(
+                  spacing: 20,
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (baht10 > 0)
+                    SizedBox(
+                      height: 150,
+                      child: Column(
+                        children: [
+                          Image(image: AssetImage("assets/money/10THB.png"),height:100,),
+                          Text('X $baht10 เหรียญ')
+                        ]
+                      ),
+                    ),
+                    if (baht5 > 0) 
+                    SizedBox(
+                      height:  150,
+                      child: Column(
+                        children: [
+                          Image(image: AssetImage("assets/money/5THB.png"),height:100,),
+                          Text('X $baht5 เหรียญ')
+                        ]
+                      ),
+                    ),
+                    if (baht2 > 0) 
+                    SizedBox(
+                      height: 150,
+                      child: Column(
+                        children: [
+                          Image(image: AssetImage("assets/money/2THB.png"),height:100,),
+                          Text('X $baht2 เหรียญ')
+                        ]
+                      ),
+                    ),
+                    if (baht1 > 0) 
+                    SizedBox(
+                      height: 150,
+                      child: Column(
+                        children: [
+                          Image(image: AssetImage("assets/money/1THB.png"),height:100,),
+                          Text('X $baht1 เหรียญ')
+                        ]
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.green),
