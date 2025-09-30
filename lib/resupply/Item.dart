@@ -20,7 +20,7 @@ class Item {
   }
 }
 
-//ของที่มีในเครื่อง
+//สินค้าที่มีในเครื่องทั้งหมด
 Map<int, Item> itemsInVendingMachine = {
   1: Item(
     name: "เลย์",

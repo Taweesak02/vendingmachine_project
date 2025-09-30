@@ -5,7 +5,7 @@ class Money {
 
   Money({required this.value, required this.image, required this.iscash});
 }
-
+//รูปเงิน
 List<String> moneyimage = [
   "assets/money/1THB.png",
   "assets/money/2THB.png",

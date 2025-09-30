@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/payment/money.dart';
 import 'package:vendingmachine_app/showresult.dart';
-import '../designGUI.dart';
+import '../home/designGUI.dart';
 import '../resupply/Item.dart';
-
+//หน้าจ่ายเงินสด
 class CashPayment extends StatefulWidget {
   const CashPayment({super.key, required this.item});
 
@@ -24,7 +24,7 @@ class _CashPaymentState extends State<CashPayment> {
     targetmoney = widget.item.price - sum;
     checkSum();
   }
-
+  //ตรวจเงินว่าครบรึยัง
   void checkSum() {
     if (targetmoney <= 0) {
       if (targetmoney < 0) {
@@ -40,13 +40,13 @@ class _CashPaymentState extends State<CashPayment> {
         context,
         MaterialPageRoute(builder: (context) => Showresult(item: widget.item)),
       );
-      print(sum);
+    
     }
   }
 
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) {
+      onPopInvoked: (didPop) {//ถ้าออกจากหน้าหลังใส่เงินเข้าตู้ไปแล้ว จะยังคงเก็บเงินไว้ในตู้อยู่
         if (!paymentCompleted) {
           sum += inputmoney;
         }
@@ -71,7 +71,7 @@ class _CashPaymentState extends State<CashPayment> {
       ),
     );
   }
-
+  //หน้าจอบอกจำนวนเงินที่ต้องจ่าย
   Widget displayMoney() {
     return Container(
       padding: EdgeInsets.all(50),
@@ -91,7 +91,7 @@ class _CashPaymentState extends State<CashPayment> {
       ),
     );
   }
-
+  // ที่รับเงินรวม
   Widget inputCash() {
     return Container(
       padding: EdgeInsets.all(50),
@@ -107,7 +107,7 @@ class _CashPaymentState extends State<CashPayment> {
       child: Column(spacing: 20, children: [cashType(), coinType()]),
     );
   }
-
+  // ที่รับเงินแบบธนบัตร
   DragTarget<Money> cashType() {
     return DragTarget(
       onAcceptWithDetails: (money) {
@@ -152,7 +152,7 @@ class _CashPaymentState extends State<CashPayment> {
           ),
     );
   }
-
+  // ที่รับเงินแบบเหรียญ
   DragTarget<Money> coinType() {
     return DragTarget(
       onAcceptWithDetails: (money) {
@@ -197,7 +197,7 @@ class _CashPaymentState extends State<CashPayment> {
           ),
     );
   }
-
+  // ที่รวม ui เงิน ของ ธนบัตรและเหรียญ
   Widget moneyOption() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -242,7 +242,7 @@ class _CashPaymentState extends State<CashPayment> {
       ),
     );
   }
-
+  //ui ของเงิน มีการระบุประเภทของเงิน
   Draggable<Money> draggableCash(Money money, Color color) {
     return Draggable(
       data: money,

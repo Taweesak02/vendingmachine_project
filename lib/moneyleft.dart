@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/showresult.dart';
-import 'designGUI.dart';
-
-class MoneyLeft extends StatelessWidget {
+import 'home/designGUI.dart';
+//หน้าเงินเหลือ ตรวจเงินเหลือในระบบ 
+class MoneyLeft extends StatelessWidget { //หน้า payment
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
@@ -18,7 +18,7 @@ class MoneyLeft extends StatelessWidget {
   }
 }
 
-class ShowMoneyLeftDialogue extends StatelessWidget {
+class ShowMoneyLeftDialogue extends StatelessWidget {//หน้าตรวจเงินเหลือ หน้าหลัก
   const ShowMoneyLeftDialogue({super.key});
 
   Widget build(BuildContext context) {

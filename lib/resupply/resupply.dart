@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vendingmachine_app/designGUI.dart';
-
+import 'package:vendingmachine_app/home/designGUI.dart';
 import 'Item.dart';
 
+//หน้าเติมของในเครื่อง
 class Resupply extends StatefulWidget {
   const Resupply({super.key});
 
@@ -12,7 +12,7 @@ class Resupply extends StatefulWidget {
 
 class _ResupplyState extends State<Resupply> {
   Widget build(BuildContext) {
-    return PopScope(
+    return PopScope(// ออกจากหน้าทำคำสั่ง
       onPopInvoked: (didPop) {
         isrefresh.value = true;
       },
@@ -27,7 +27,7 @@ class _ResupplyState extends State<Resupply> {
       ),
     );
   }
-
+  //แสดงของทุกชิ้น
   Widget ListItem(Item item) {
     return Card(
       child: ListTile(
@@ -47,7 +47,7 @@ class _ResupplyState extends State<Resupply> {
   }
 }
 
-class ShowResupplyBT extends StatelessWidget {
+class ShowResupplyBT extends StatelessWidget {//ปุ่มเข้าหน้า restock
   const ShowResupplyBT({super.key});
 
   Widget build(BuildContext context) {

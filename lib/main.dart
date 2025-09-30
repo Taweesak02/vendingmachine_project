@@ -1,7 +1,7 @@
 // ignore_for_file: annotate_overrides
 
 import 'package:flutter/material.dart';
-import 'package:vendingmachine_app/designGUI.dart';
+import 'package:vendingmachine_app/home/designGUI.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(appBarTheme: AppBarTheme(foregroundColor: Colors.white,backgroundColor: Colors.deepPurple)),
-      title: "Vending Machine App",
+      title: "แอป ตู้ขายของอัตโนมัติ",
       home: VendingMachineGUI(),
     );
   }

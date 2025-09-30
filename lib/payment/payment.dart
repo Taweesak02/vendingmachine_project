@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/moneyleft.dart';
 import '../resupply/Item.dart';
+
 import 'cashpayment.dart';
 import 'digitalpayment.dart';
 
-
-
+//หน้าซื้อของ เลือกวิธีการชำระเงิน
 class Payment extends StatefulWidget {
   const Payment({super.key, required this.item});
   final Item item;
@@ -18,7 +18,7 @@ class _PaymentState extends State<Payment> {
   double size = 300;
 
   Widget build(BuildContext context) {
-    List<Widget> paymentOptions() => [
+    List<Widget> paymentOptions() => [// list ของตัวเลือก
       SizedBox(
         width: size,
         height: size,
@@ -33,19 +33,8 @@ class _PaymentState extends State<Payment> {
                   builder: (context) => CashPayment(item: widget.item),
                 ),
               );
-              // if (sum - widget.item.price < 0) {
-              //   print(sum);
-                
-              // } else {
-              //   sum -= widget.item.price;
-              //   print(sum);
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (context) => Showresult(item: widget.item,)),
-              //   );
-              // }
             },
-            child: Column(
+            child: Column(//ตัวเลือกเงินสด
               spacing: 20,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [Icon(Icons.wallet, size: 80), Text("เงินสด")],
@@ -66,12 +55,12 @@ class _PaymentState extends State<Payment> {
                 MaterialPageRoute(builder: (context) => DigitalPayment(item: widget.item,)),
               );
             },
-            child: Column(
+            child: Column(//ตัวเลือกจ่ายสแกน
               spacing: 20,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.phone_android, size: 80),
-                Text("จ่ายด้วยธนาคาร"),
+                Text("จ่ายด้วยการสแกน"),
               ],
             ),
           ),

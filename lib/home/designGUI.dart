@@ -1,13 +1,11 @@
-// ignore_for_file: annotate_overrides
-
 import 'package:flutter/material.dart';
 import 'package:vendingmachine_app/moneyleft.dart';
-import 'package:vendingmachine_app/payment/payment.dart';
 import 'package:vendingmachine_app/resupply/resupply.dart';
-import 'resupply/Item.dart';
-import 'showresult.dart';
 
-final ValueNotifier<bool> isrefresh = ValueNotifier(false);
+import '../resupply/Item.dart';
+import 'confirmpurchase.dart';
+
+final ValueNotifier<bool> isrefresh = ValueNotifier(false);//ตรวจเมื่อเข้ามาหน้าจอนี้จะเป็นค่า true เพื่อ refesh ui
 double sum = 0;
 
 class VendingMachineGUI extends StatefulWidget {
@@ -16,7 +14,7 @@ class VendingMachineGUI extends StatefulWidget {
   @override
   State<VendingMachineGUI> createState() => _VendingMachineGUIState();
 }
-
+//หน้าหลักตู้
 class _VendingMachineGUIState extends State<VendingMachineGUI> {
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +22,9 @@ class _VendingMachineGUIState extends State<VendingMachineGUI> {
         title: Text("Vending Machine"),
         actionsPadding: EdgeInsets.all(10),
         actions: [
-          ShowResupplyBT(),
+          Tooltip(message: "เติมสินค้า" ,child: ShowResupplyBT()),
           SizedBox(width: 10),
-          ShowMoneyLeftDialogue(),
+          Tooltip(message: "เงินคงเหลือ",child: ShowMoneyLeftDialogue()),
         ],
       ),
       body: Container(
@@ -55,13 +53,13 @@ class ItemDisplay extends StatefulWidget {
   @override
   State<ItemDisplay> createState() => _ItemDisplayState();
 }
-
+//แสดงสินค้า จำนวนของ ราคาของ
 class _ItemDisplayState extends State<ItemDisplay> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
-      child: InkWell(
+      child: InkWell(//แสดงหน้ายืนยันการซื้อสินค้า
         borderRadius: BorderRadius.circular(8),
         onTap: () {
           showDialog(
@@ -69,7 +67,7 @@ class _ItemDisplayState extends State<ItemDisplay> {
             builder: (context) => ConfirmPurchase(item: widget.item),
           );
         },
-        child: ValueListenableBuilder(
+        child: ValueListenableBuilder(//ตรวจ isrefresh เมื่อ เป็น true จะ refresh ui
           valueListenable: isrefresh,
           builder: (context, value, child) {
             isrefresh.value = false;
@@ -129,114 +127,3 @@ class _ItemDisplayState extends State<ItemDisplay> {
   }
 }
 
-class ConfirmPurchase extends StatelessWidget {
-  const ConfirmPurchase({super.key, required this.item});
-
-  final Item item;
-
-  Widget build(BuildContext context) {
-    return item.stockLeft > 0 ? haveStock(context) : noStock(context);
-  }
-
-  Widget haveStock(BuildContext context) {
-    return AlertDialog(
-      title: Text("ยืนยันการซื้อของ"),
-      content: Card(
-        color: Colors.white,
-        child: Container(
-          padding: EdgeInsets.all(20),
-          width: 300,
-          height: 300,
-          child: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Image(
-                  image: AssetImage(item.image),
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
-              Text(item.name),
-              Text("${item.price.toString()} ฿"),
-            ],
-          ),
-        ),
-      ),
-      actionsAlignment: MainAxisAlignment.center,
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-            padding: WidgetStateProperty.all(
-              EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
-              ),
-            ),
-            backgroundColor: WidgetStateProperty.all(Colors.green),
-          ),
-          child: const Text('ยืนยัน', style: TextStyle(color: Colors.white)),
-          onPressed: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => Payment(item: item)),
-            // );
-            Navigator.of(context).pop();
-              if (sum - item.price < 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Payment(item: item),
-                  ),
-                );
-              } else {
-                sum -= item.price;
-                print(sum);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Showresult(item:item,)),
-                );
-              }
-          },
-        ),
-        TextButton(
-          style: ButtonStyle(
-            padding: WidgetStateProperty.all(
-              EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.04,
-              ),
-            ),
-            backgroundColor: WidgetStateProperty.all(Colors.red),
-          ),
-          child: const Text('ยกเลิก', style: TextStyle(color: Colors.white)),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget noStock(BuildContext context) {
-    return AlertDialog(
-      title: Text("สินค้าชิ้นนี้ยังไม่มีของ"),
-      actionsAlignment: MainAxisAlignment.spaceAround,
-      actions: [
-        SizedBox(
-          width: double.infinity,
-          child: TextButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.red),
-            ),
-            child: const Text(
-              'ย้อนกลับ',
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}

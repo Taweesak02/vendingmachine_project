@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vendingmachine_app/designGUI.dart';
+import 'package:vendingmachine_app/home/designGUI.dart';
 import 'resupply/Item.dart';
-
+//หน้าแสดงผล ซื้อของเสร็จสิ้น
 class Showresult extends StatefulWidget {
   const Showresult({super.key, required this.item});
 
@@ -15,7 +15,6 @@ class _ShowresultState extends State<Showresult> {
   void initState() {
     super.initState();
     widget.item.decrease();
-    print(widget.item.stockLeft);
   }
 
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class _ShowresultState extends State<Showresult> {
     }
 
     return PopScope(
-      onPopInvoked: (didPop) {
+      onPopInvoked: (didPop) {//ซื้อของเสร็จเข้าหน้าหลักให้ refresh ui
         isrefresh.value = true;
       },
       child: Scaffold(
@@ -92,7 +91,7 @@ class _ShowresultState extends State<Showresult> {
     );
   }
 }
-
+//หน้าขอคืนเงิน
 class ShowWithdrawn extends StatelessWidget {
   const ShowWithdrawn({super.key});
 
